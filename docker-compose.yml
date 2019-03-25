@@ -3,6 +3,8 @@ version: '3'
 services:
   postgis:
     image: mdillon/postgis:9.4-alpine
+    ports:
+      - 5433:5432
     environment:
       POSTGRES_USER: n50kartdata
       POSTGRES_PASSWORD: n50kartdata
