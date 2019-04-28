@@ -31,7 +31,12 @@ namespace n50kartdata_etl
         public Geometry omrade { get; set; }
         [NotMapped]
         [JsonProperty(PropertyName = "omrade")]
-        private Geometri _omrade => new Geometri { srid = omrade.SRID, geometritype = omrade.GeometryType, wkt = omrade.ToString() };
+        public Geometri _omrade =>
+            new Geometri {
+                srid = omrade.SRID,
+                geometritype = omrade.GeometryType,
+                wkt = omrade.ToString()
+            };
     }
 
     public class Geometri

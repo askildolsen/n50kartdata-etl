@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Raven.Client.Documents;
 using Raven.Client.Documents.BulkInsert;
+using Raven.Client.Documents.Operations.Indexes;
 using Raven.Client.Json;
 
 namespace n50kartdata_etl
@@ -19,6 +20,11 @@ namespace n50kartdata_etl
 
                 var stopwatch = Stopwatch.StartNew();
 
+                if (store.Maintenance.Send(new GetIndexOperation("N50KartdataResourceIndex")) == null)
+                {
+                    new N50KartdataResourceModel.N50KartdataResourceIndex().Execute(store);
+                }
+
                 using (BulkInsertOperation bulkInsert = store.BulkInsert())
                 {
                     using (var context = new N50KartdataContext())
@@ -27,7 +33,7 @@ namespace n50kartdata_etl
                         {
                             bulkInsert.Store(
                                 kommune,
-                                "N50Kartdata/Kommuner/" + kommune.objid,
+                                "N50Kartdata/Kommune/" + kommune.objid,
                                 new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
                             );
                         }
