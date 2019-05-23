@@ -22,6 +22,7 @@ namespace n50kartdata_etl
                     {
                         ResourceId = "Kommune/" + kommune.kommunenummer,
                         Type = new[] { "Kommune" },
+                        SubType = new string[] { },
                         Title = new[] { kommune.navn },
                         Code = new[] { kommune.kommunenummer },
                         Properties =
@@ -63,6 +64,7 @@ namespace n50kartdata_etl
                     {
                         ResourceId = "Fylke/" + fylke.Code,
                         Type = new[] { "Fylke" },
+                        SubType = new string[] { },
                         Title = new[] { fylke.Title },
                         Code = new[] { fylke.Code },
                         Properties = new[] {
@@ -77,6 +79,25 @@ namespace n50kartdata_etl
                     }
                 );
 
+                AddMap<NaturvernOmrade>(n50kartdata =>
+                    from naturvernomrade in n50kartdata.WhereEntityIs<NaturvernOmrade>("N50Kartdata")
+                    let metadata = MetadataFor(naturvernomrade)
+                    where metadata.Value<string>("@id").StartsWith("N50Kartdata/NaturvernOmrade")
+                    select new Resource
+                    {
+                        ResourceId = "NaturvernOmrade/" + naturvernomrade.objid,
+                        Type = new[] { "Naturvernområde" },
+                        SubType = new[] { LoadDocument<Verneform>("N50Kartdata/Verneform/" + naturvernomrade.verneform).description },
+                        Title = new[] { naturvernomrade.navn },
+                        Code = new string[] { },
+                        Properties =
+                            from wkt in new[] { naturvernomrade._omrade.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
+                            select new Property { Name = "Område", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
+                        Source = new[] { metadata.Value<string>("@id") },
+                        Modified = naturvernomrade.oppdateringsdato
+                    }
+                );
+
                 Reduce = results  =>
                     from result in results
                     group result by result.ResourceId into g
@@ -84,6 +105,7 @@ namespace n50kartdata_etl
                     {
                         ResourceId = g.Key,
                         Type = g.SelectMany(r => r.Type).Distinct(),
+                        SubType = g.SelectMany(r => r.SubType).Distinct(),
                         Title = g.SelectMany(r => r.Title).Distinct(),
                         Code = g.SelectMany(r => r.Code).Distinct(),
                         Properties = (

@@ -37,6 +37,24 @@ namespace n50kartdata_etl
                                 new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
                             );
                         }
+
+                        foreach(var naturvernomrade in context.NaturvernOmrader.AsNoTracking())
+                        {
+                            bulkInsert.Store(
+                                naturvernomrade,
+                                "N50Kartdata/NaturvernOmrade/" + naturvernomrade.objid,
+                                new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
+                            );
+                        }
+
+                        foreach(var verneform in context.Verneformer.AsNoTracking())
+                        {
+                            bulkInsert.Store(
+                                verneform,
+                                "N50Kartdata/Verneform/" + verneform.identifier,
+                                new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
+                            );
+                        }
                     }
                 }
 
