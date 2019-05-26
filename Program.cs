@@ -55,6 +55,15 @@ namespace n50kartdata_etl
                                 new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
                             );
                         }
+
+                        foreach(var sti in context.Stier.AsNoTracking())
+                        {
+                            bulkInsert.Store(
+                                sti,
+                                "N50Kartdata/Sti/" + sti.objid,
+                                new MetadataAsDictionary(new Dictionary<string, object> { { "@collection", "N50Kartdata"}})
+                            );
+                        }
                     }
                 }
 

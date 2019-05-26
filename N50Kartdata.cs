@@ -13,10 +13,18 @@ namespace n50kartdata_etl
         public DbSet<Kommune> Kommuner { get; set; }
         public DbSet<NaturvernOmrade> NaturvernOmrader { get; set; }
         public DbSet<Verneform> Verneformer { get; set; }
+        public DbQuery<Sti> Stier { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(@"Host=localhost;Port=5433;Database=n50kartdata;Username=n50kartdata;Password=n50kartdata", x => x.UseNetTopologySuite());
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Query<Sti>()
+                .ToQuery(() => Stier.FromSql("SELECT *, ST_CurveToLine(senterlinje) AS senterlinje_Line FROM sti"));
         }
     }
 
@@ -69,6 +77,29 @@ namespace n50kartdata_etl
         [Key]
         public string identifier { get; set; }
         public string description { get; set; }
+    }
+
+    public class Sti
+    {
+        public int objid { get; set; }
+        public string objtype { get; set; }
+        public DateTime datafangstdato { get; set; }
+        public DateTime oppdateringsdato { get; set; }
+        public string merking { get; set; }
+        public string vedlikeholdsansvarlig { get; set; }
+        public string medium { get; set; }
+        public string malemetode { get; set; }
+        public string noyaktighet { get; set; }
+        [JsonIgnore]
+        public Geometry senterlinje_Line { get; set; }
+        [NotMapped]
+        [JsonProperty(PropertyName = "senterlinje")]
+        public Geometri _senterlinje =>
+            new Geometri {
+                srid = senterlinje_Line.SRID,
+                geometritype = senterlinje_Line.GeometryType,
+                wkt = senterlinje_Line.ToString()
+            };
     }
 
     public class Geometri

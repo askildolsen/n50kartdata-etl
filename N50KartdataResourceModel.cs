@@ -25,6 +25,7 @@ namespace n50kartdata_etl
                         SubType = new string[] { },
                         Title = new[] { kommune.navn },
                         Code = new[] { kommune.kommunenummer },
+                        Status = new string[] { },
                         Properties =
                             from wkt in new[] { kommune._omrade.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
                             select new Property { Name = "Område", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
@@ -67,6 +68,7 @@ namespace n50kartdata_etl
                         SubType = new string[] { },
                         Title = new[] { fylke.Title },
                         Code = new[] { fylke.Code },
+                        Status = new string[] { },
                         Properties = new[] {
                             new Property {
                                 Name = "Kommune",
@@ -90,11 +92,32 @@ namespace n50kartdata_etl
                         SubType = new[] { LoadDocument<Verneform>("N50Kartdata/Verneform/" + naturvernomrade.verneform).description },
                         Title = new[] { naturvernomrade.navn },
                         Code = new string[] { },
+                        Status = new string[] { },
                         Properties =
                             from wkt in new[] { naturvernomrade._omrade.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
                             select new Property { Name = "Område", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
                         Source = new[] { metadata.Value<string>("@id") },
                         Modified = naturvernomrade.oppdateringsdato
+                    }
+                );
+
+                AddMap<Sti>(n50kartdata =>
+                    from sti in n50kartdata.WhereEntityIs<Sti>("N50Kartdata")
+                    let metadata = MetadataFor(sti)
+                    where metadata.Value<string>("@id").StartsWith("N50Kartdata/Sti")
+                    select new Resource
+                    {
+                        ResourceId = "Sti/" + sti.objid,
+                        Type = new[] { "Sti" },
+                        SubType = new string[] { sti.vedlikeholdsansvarlig }.Where(t => !String.IsNullOrWhiteSpace(t)),
+                        Title = new string[] { },
+                        Code = new string[] { },
+                        Status = new string[] { (sti.merking == "JA") ? "Merket" : "" }.Where(t => !String.IsNullOrWhiteSpace(t)),
+                        Properties =
+                            from wkt in new[] { sti._senterlinje.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
+                            select new Property { Name = "Senterlinje", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
+                        Source = new[] { metadata.Value<string>("@id") },
+                        Modified = sti.oppdateringsdato
                     }
                 );
 
@@ -108,6 +131,7 @@ namespace n50kartdata_etl
                         SubType = g.SelectMany(r => r.SubType).Distinct(),
                         Title = g.SelectMany(r => r.Title).Distinct(),
                         Code = g.SelectMany(r => r.Code).Distinct(),
+                        Status = g.SelectMany(r => r.Status).Distinct(),
                         Properties = (IEnumerable<Property>)Properties(g.SelectMany(r => r.Properties)),
                         Source = g.SelectMany(resource => resource.Source).Distinct(),
                         Modified = g.Select(resource => resource.Modified).Max()
