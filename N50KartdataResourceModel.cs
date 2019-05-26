@@ -108,18 +108,7 @@ namespace n50kartdata_etl
                         SubType = g.SelectMany(r => r.SubType).Distinct(),
                         Title = g.SelectMany(r => r.Title).Distinct(),
                         Code = g.SelectMany(r => r.Code).Distinct(),
-                        Properties = (
-                            g.SelectMany(r => r.Properties).Where(p => !p.Tags.Contains("@union"))
-                        ).Union(
-                            from property in g.SelectMany(r => r.Properties).Where(p => p.Tags.Contains("@union"))
-                            group property by property.Name into propertyG
-                            select
-                                new Property {
-                                    Name = propertyG.Key,
-                                    Tags = propertyG.SelectMany(p => p.Tags).Distinct(),
-                                    Resources = propertyG.SelectMany(p => p.Resources).Distinct()
-                                }
-                        ),
+                        Properties = (IEnumerable<Property>)Properties(g.SelectMany(r => r.Properties)),
                         Source = g.SelectMany(resource => resource.Source).Distinct(),
                         Modified = g.Select(resource => resource.Modified).Max()
                     };

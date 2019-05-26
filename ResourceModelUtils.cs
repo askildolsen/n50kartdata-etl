@@ -1,18 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace n50kartdata_etl
 {
     public class ResourceModelUtils
     {
-        public static string ResourceTarget(string Context, string ResourceId)
-        {
-            return Context + "/" + CalculateXXHash64(ResourceId);
-        }
 
-        private static string CalculateXXHash64(string key)
+        public static IEnumerable<dynamic> Properties(IEnumerable<dynamic> properties)
         {
-            return Sparrow.Hashing.XXHash64.Calculate(key, System.Text.Encoding.UTF8).ToString();
+            foreach(var propertyG in ((IEnumerable<dynamic>)properties).GroupBy(p => p.Name))
+            {
+                if (propertyG.Any(p => p.Tags.Contains("@union")))
+                {
+                    yield
+                        return new {
+                            Name = propertyG.Key,
+                            Tags = propertyG.SelectMany(p => (IEnumerable<dynamic>)p.Tags).Distinct(),
+                            Resources = propertyG.SelectMany(p => (IEnumerable<dynamic>)p.Resources).Distinct(),
+                        };
+                }
+                else
+                {
+                    yield return propertyG.First();
+                }
+            }
         }
 
         public static string WKTProjectToWGS84(string wkt, int fromsrid)
