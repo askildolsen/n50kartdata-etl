@@ -89,7 +89,7 @@ namespace n50kartdata_etl
                     {
                         ResourceId = "NaturvernOmrade/" + naturvernomrade.objid,
                         Type = new[] { "Naturvernområde" },
-                        SubType = new[] { LoadDocument<Verneform>("N50Kartdata/Verneform/" + naturvernomrade.verneform).description },
+                        SubType = new[] { LoadDocument<Verneform>("N50Kartdata/Verneform/" + naturvernomrade.verneform).description }.Where(s => !String.IsNullOrWhiteSpace(s)),
                         Title = new[] { naturvernomrade.navn },
                         Code = new string[] { },
                         Status = new string[] { },
