@@ -28,7 +28,7 @@ namespace n50kartdata_etl
                         Status = new string[] { },
                         Properties =
                             from wkt in new[] { kommune._omrade.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
-                            select new Property { Name = "Område", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
+                            select new Property { Name = "Område", Tags = new[] { "@wkt", "@union" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
                         Source = new[] { metadata.Value<string>("@id") },
                         Modified = kommune.oppdateringsdato
                     }

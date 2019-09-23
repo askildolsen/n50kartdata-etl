@@ -16,6 +16,7 @@ namespace n50kartdata_etl
                     yield
                         return new {
                             Name = propertyG.Key,
+                            Value = propertyG.SelectMany(p => (IEnumerable<dynamic>)p.Value).Distinct(),
                             Tags = propertyG.SelectMany(p => (IEnumerable<dynamic>)p.Tags).Distinct(),
                             Resources = propertyG.SelectMany(p => (IEnumerable<dynamic>)p.Resources).Distinct(),
                         };
