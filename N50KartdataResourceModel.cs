@@ -87,7 +87,7 @@ namespace n50kartdata_etl
                     where metadata.Value<string>("@id").StartsWith("N50Kartdata/NaturvernOmrade")
                     select new Resource
                     {
-                        ResourceId = "NaturvernOmrade/" + naturvernomrade.objid,
+                        ResourceId = "Naturvern/" + naturvernomrade.verneform + "/" + naturvernomrade.navn,
                         Type = new[] { "Naturvernområde" },
                         SubType = new[] { LoadDocument<Verneform>("N50Kartdata/Verneform/" + naturvernomrade.verneform).description }.Where(s => !String.IsNullOrWhiteSpace(s)),
                         Title = new[] { naturvernomrade.navn },
@@ -95,7 +95,7 @@ namespace n50kartdata_etl
                         Status = new string[] { },
                         Properties =
                             from wkt in new[] { naturvernomrade._omrade.wkt }.Where(v => !String.IsNullOrWhiteSpace(v))
-                            select new Property { Name = "Område", Tags = new[] { "@wkt" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
+                            select new Property { Name = "Område", Tags = new[] { "@wkt", "@union" }, Value = new[] { WKTProjectToWGS84(wkt, 0) } },
                         Source = new[] { metadata.Value<string>("@id") },
                         Modified = naturvernomrade.oppdateringsdato
                     }
