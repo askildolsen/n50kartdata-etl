@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +20,7 @@ namespace n50kartdata_etl
 
                 var stopwatch = Stopwatch.StartNew();
 
-                if (store.Maintenance.Send(new GetIndexOperation("N50KartdataResourceIndex")) == null)
-                {
-                    new N50KartdataResourceModel.N50KartdataResourceIndex().Execute(store);
-                }
+                new N50KartdataResourceModel.N50KartdataResourceIndex().Execute(store);
 
                 using (BulkInsertOperation bulkInsert = store.BulkInsert())
                 {
