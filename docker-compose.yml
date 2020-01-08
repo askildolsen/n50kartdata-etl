@@ -11,8 +11,8 @@ services:
       POSTGRES_DB: n50kartdata
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./initdb.d/restore.sh:/docker-entrypoint-initdb.d/xrestore.sh
-      - ./initdb.d/rename.sql:/docker-entrypoint-initdb.d/xschemarename.sql
+      - ./initdb.d/restore.sh:/docker-entrypoint-initdb.d/z10_restore.sh
+      - ./initdb.d/rename.sql:/docker-entrypoint-initdb.d/z20_rename.sql
       - ./n50kartdata.tmp/Basisdata_0000_Norge_25833_N50Kartdata_PostGIS.backup:/tmp/N50Kartdata.backup
     restart: always
 
