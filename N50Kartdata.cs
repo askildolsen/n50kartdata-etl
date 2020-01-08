@@ -13,7 +13,7 @@ namespace n50kartdata_etl
         public DbSet<Kommune> Kommuner { get; set; }
         public DbSet<NaturvernOmrade> NaturvernOmrader { get; set; }
         public DbSet<Verneform> Verneformer { get; set; }
-        public DbQuery<Sti> Stier { get; set; }
+        public DbSet<Sti> Stier { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,8 +23,9 @@ namespace n50kartdata_etl
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .Query<Sti>()
-                .ToQuery(() => Stier.FromSql("SELECT *, ST_CurveToLine(senterlinje) AS senterlinje_Line FROM sti"));
+                .Entity<Sti>()
+                .HasNoKey()
+                .ToQuery(() => Stier.FromSqlRaw("SELECT *, ST_CurveToLine(senterlinje) AS senterlinje_Line FROM sti"));
         }
     }
 
