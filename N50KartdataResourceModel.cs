@@ -40,24 +40,17 @@ namespace n50kartdata_etl
                     where metadata.Value<string>("@id").StartsWith("N50Kartdata/Kommune")
 
                     from fylke in new[] {
-                        new { Code = "01", Title = "Østfold"},
-                        new { Code = "02", Title = "Akershus"},
                         new { Code = "03", Title = "Oslo"},
-                        new { Code = "04", Title = "Hedmark"},
-                        new { Code = "05", Title = "Oppland"},
-                        new { Code = "06", Title = "Buskerud"},
-                        new { Code = "07", Title = "Vestfold"},
-                        new { Code = "08", Title = "Telemark"},
-                        new { Code = "09", Title = "Aust-Agder"},
-                        new { Code = "10", Title = "Vest-Agder"},
                         new { Code = "11", Title = "Rogaland"},
-                        new { Code = "12", Title = "Hordaland"},
-                        new { Code = "14", Title = "Sogn og Fjordane"},
                         new { Code = "15", Title = "Møre og Romsdal"},
                         new { Code = "18", Title = "Nordland"},
-                        new { Code = "19", Title = "Troms"},
-                        new { Code = "20", Title = "Finnmark"},
+                        new { Code = "30", Title = "Viken"},
+                        new { Code = "34", Title = "Innlandet"},
+                        new { Code = "38", Title = "Vestfold og Telemark"},
+                        new { Code = "42", Title = "Agder" },
+                        new { Code = "46", Title = "Vestland"},
                         new { Code = "50", Title = "Trøndelag"},
+                        new { Code = "54", Title = "Troms og Finnmark"},
                     }
                     where fylke.Code == kommune.kommunenummer.Substring(0,2)
  
