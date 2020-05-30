@@ -134,8 +134,7 @@ namespace n50kartdata_etl
                         Modified = g.Select(resource => resource.Modified).Max()
                     };
 
-                Index(r => r.Properties, FieldIndexing.No);
-                Store(r => r.Properties, FieldStorage.Yes);
+                Index(Raven.Client.Constants.Documents.Indexing.Fields.AllFields, FieldIndexing.No);
 
                 OutputReduceToCollection = "N50KartdataResource";
 
@@ -146,14 +145,6 @@ namespace n50kartdata_etl
                         ReadResourceFile("n50kartdata_etl.ResourceModelUtils.cs")
                     }
                 };
-            }
-
-            public override IndexDefinition CreateIndexDefinition()
-            {
-                var indexDefinition = base.CreateIndexDefinition();
-                indexDefinition.Configuration = new IndexConfiguration { { "Indexing.MapTimeoutInSec", "30"} };
-
-                return indexDefinition;
             }
         }
     }
