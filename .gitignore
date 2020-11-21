@@ -1,5 +1,5 @@
-[Bb]in
-[Oo]bj
+[Bb]in.tmp
+[Oo]bj.tmp
 .DS_Store
 .vscode/*
 n50kartdata.tmp/*
