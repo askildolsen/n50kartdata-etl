@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.2" />
-    <PackageReference Include="RavenDB.Client" Version="5.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="ResourceModelUtils.cs" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.7" />
+    <PackageReference Include="RavenDB.Client" Version="5.2.2" />
   </ItemGroup>
 
 </Project>

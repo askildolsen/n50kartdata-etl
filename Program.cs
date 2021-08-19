@@ -12,7 +12,7 @@ namespace n50kartdata_etl
     {
         static void Main(string[] args)
         {
-            using (var store = new DocumentStore { Urls = new string[] { "http://localhost:8080" }, Database = "Digitalisert" })
+            using (var store = new DocumentStore { Urls = new string[] { "http://ravendb:8080" }, Database = "Digitalisert" })
             {
                 store.Conventions.FindCollectionName = t => t.Name;
                 store.Initialize();

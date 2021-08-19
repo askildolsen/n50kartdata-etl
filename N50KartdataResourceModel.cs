@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq.Indexing;
-using static n50kartdata_etl.ResourceModel;
-using static n50kartdata_etl.ResourceModelUtils;
+using static Digitalisert.Dataplattform.ResourceModel;
+using static Digitalisert.Dataplattform.ResourceModelExtensions;
 
 namespace n50kartdata_etl
 {
@@ -138,12 +138,8 @@ namespace n50kartdata_etl
 
                 OutputReduceToCollection = "N50KartdataResource";
 
-                AdditionalSources = new Dictionary<string, string>
-                {
-                    {
-                        "ResourceModel",
-                        ReadResourceFile("n50kartdata_etl.ResourceModelUtils.cs")
-                    }
+                AdditionalAssemblies = new HashSet<AdditionalAssembly> {
+                    AdditionalAssembly.FromPath("Digitalisert.Dataplattform.ResourceModel.dll", new HashSet<string> { "Digitalisert.Dataplattform" })
                 };
             }
         }

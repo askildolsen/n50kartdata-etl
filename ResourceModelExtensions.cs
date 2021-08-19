@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Digitalisert.Raven
+namespace Digitalisert.Dataplattform
 {
     public static class ResourceModelExtensions
     {

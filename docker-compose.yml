@@ -1,10 +1,18 @@
 version: '3'
 
 services:
+  dotnet:
+    build: .
+    networks:
+      - default
+      - backend
+    depends_on:
+      - postgis
+
   postgis:
     image: mdillon/postgis:9.4-alpine
-    ports:
-      - 5433:5432
+    networks:
+      - backend
     environment:
       POSTGRES_USER: n50kartdata
       POSTGRES_PASSWORD: n50kartdata
@@ -15,6 +23,12 @@ services:
       - ./initdb.d/rename.sql:/docker-entrypoint-initdb.d/z20_rename.sql
       - ./n50kartdata.tmp/Basisdata_0000_Norge_25833_N50Kartdata_PostGIS.backup:/tmp/N50Kartdata.backup
     restart: always
+
+networks:
+  default:
+    external: true
+    name: dataplattform_etl
+  backend:
 
 volumes:
   db_data:

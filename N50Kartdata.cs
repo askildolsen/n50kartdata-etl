@@ -17,7 +17,7 @@ namespace n50kartdata_etl
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(@"Host=localhost;Port=5433;Database=n50kartdata;Username=n50kartdata;Password=n50kartdata", x => x.UseNetTopologySuite());
+            optionsBuilder.UseNpgsql(@"Host=postgis;Port=5432;Database=n50kartdata;Username=n50kartdata;Password=n50kartdata", x => x.UseNetTopologySuite());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

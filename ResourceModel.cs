@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace n50kartdata_etl
+namespace Digitalisert.Dataplattform
 {
     public class ResourceModel
     {
