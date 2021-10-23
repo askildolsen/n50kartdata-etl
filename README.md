@@ -1,1 +1,2 @@
-# n50kartdata-etl
+docker-compose build
+docker-compose run --rm dotnet
